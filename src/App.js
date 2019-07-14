@@ -44,7 +44,7 @@ export default class ImageForm extends React.Component {
       users[i] = {...users[i], file: read.result};
       this.setState({ users });
     }
- }
+  }
   
   removeClick(i){
      let users = [...this.state.users];
@@ -54,11 +54,14 @@ export default class ImageForm extends React.Component {
   
   handleSubmit(event) {
     var preview = document.querySelector('#preview');
-    var file = JSON.parse(JSON.stringify(this.state.users)).map(x => x.file);
-    file.forEach(function(item){
+    var images = JSON.parse(JSON.stringify(this.state.users));
+    images.forEach(function(item){
       var image = new Image();
       image.height = 100;
-      image.src = item;
+      image.width = 150;
+      image.src = item.file;
+      image.title = item.name;
+      image.alt = item.description;
       preview.appendChild( image );
     });
     event.preventDefault();
