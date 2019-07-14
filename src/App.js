@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+var ReactGridLayout = require('react-grid-layout');
 
 export default class ImageForm extends React.Component {
   constructor(props) {
@@ -70,12 +71,14 @@ export default class ImageForm extends React.Component {
   render() {
     return (
       <div>
-      <form onSubmit={this.handleSubmit}>
-          {this.createUI()}        
-          <input type='button' value='add more' onClick={this.addClick.bind(this)}/>
-          <input type="submit" value="Submit" />
-      </form>
-      <div id="preview"></div>
+        <form onSubmit={this.handleSubmit}>
+            {this.createUI()}        
+            <input type='button' value='add more' onClick={this.addClick.bind(this)}/>
+            <input type="submit" value="Submit" />
+        </form>
+        <ReactGridLayout className="layout" cols={12} rowHeight={30} width={1200}>
+          <div id="preview" key="1" data-grid={{x: 0, y: 0, w: 1, h: 2}}></div>
+        </ReactGridLayout>
       </div>
     );
   }
