@@ -7,7 +7,7 @@ export default class ImageForm extends React.Component {
     super(props);
     this.state = {
       imageData: [{ id: 1, description: "", files: [], names: [] }],
-      showImages: false,
+      showImages: false
     };
   }
 
@@ -22,10 +22,9 @@ export default class ImageForm extends React.Component {
     }
 
     this.setState({
-    	imageData: [...imageData, { id: prevId + 1, description: "", files: [], names: [] }]
+      imageData: [...imageData, { id: prevId + 1, description: "", files: [], names: [] }],
+      showImages: false
     });
-
-    this.setState({showImages: false});
   }
 
   findImageData = (id) => {
@@ -34,9 +33,9 @@ export default class ImageForm extends React.Component {
 
   createUI(){
     return this.state.imageData.map(el => (
-      <div key={el.id}>
-        <input type='file' name="image" onChange={this.handleImageChange.bind(this, el.id)} multiple />
-        <textarea placeholder="Description" name="description" value={el.description ||''} onChange={this.handleChange.bind(this, el.id)} />
+      <div key={el.id} >
+        <input type='file' className="ml-4 mt-4" name="image" onChange={this.handleImageChange.bind(this, el.id)} multiple required />
+        <textarea placeholder="Add Description" className="ml-4 my-2" name="description" value={el.description ||''} onChange={this.handleChange.bind(this, el.id)} />
       </div>          
     ))
   }
@@ -65,8 +64,8 @@ export default class ImageForm extends React.Component {
     this.setState({ imageData });
   }
   
-  handleSubmit = (event) => {
-    event.preventDefault();
+  handleSubmit = (e) => {
+    e.preventDefault();
     this.setState({showImages: true});
   }
 
@@ -82,25 +81,25 @@ export default class ImageForm extends React.Component {
 
   displayImages = () => {
     var images = JSON.parse(JSON.stringify(this.state.imageData));
-    var i = 0;
+    var key = 0;
 
     return images.map((element) => {
       let id = element.id;
       let description = element.description;
       let names = element.names;
-      var k = -2;
-      var l = 0;
+      var k = -3;
+      var index = 0;
       return element.files.map((x) => {
-        k = k + 2;
+        k = k + 3;
         if (k === 12)
         {
           k = 0;
         }
         return (
-          <div key={i++} data-grid={{x: k, y: 1, w: 2, h: 6}}>
-            <img title = {names[l++] + "\n" + description} src={x} height="150" width="150"/>
-            <button type='button' name={l-1} onMouseDown={this.removeClick.bind(this, id)} onTouchStart={this.removeClick.bind(this, id)}>
-            X
+          <div className="card" key={key++} data-grid={{x: k, y: 1, w: 3, h: 6}}>
+            <img title = {names[index++] + "\n" + description} src={x} height="180" width="222"/>
+            <button type='button' className="btn btn-danger" name={index-1} onMouseDown={this.removeClick.bind(this, id)} onTouchStart={this.removeClick.bind(this, id)}>
+              X
             </button>
           </div>
         );
@@ -116,16 +115,21 @@ export default class ImageForm extends React.Component {
     }
 
     return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          {this.createUI()}        
-          <input type='button' value='add more' onClick={this.addClick.bind(this)}/>
-          <input type="submit" value="Submit" />
+      <div className="row">
+        <form className="col-md-3" onSubmit={this.handleSubmit}>
+          {this.createUI()}
+          <button type="submit" className="btn btn-primary">
+            Submit
+          </button>
+          <button type="button" className="btn btn-info ml-4 mb-2" onClick={this.addClick.bind(this)}>
+            Add more
+          </button>
         </form>
-
-        <ReactGridLayout className="layout" cols={12} rowHeight={30} width={1200}>
-          {imageHtml}
-        </ReactGridLayout>
+        <div className="col-md-9">
+          <ReactGridLayout className="layout card mt-4" cols={12} rowHeight={30} width={950}>
+            {imageHtml}
+          </ReactGridLayout>
+        </div>
       </div>
     );
   }
