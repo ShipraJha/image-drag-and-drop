@@ -14,13 +14,7 @@ export default class App extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { imageData } = this.state;
-    let prevId;
-
-    if (imageData.length) {
-      prevId = imageData[imageData.length - 1].id;
-    } else {
-      prevId = 0;
-    }
+    let prevId = imageData[imageData.length - 1].id;
 
     let image = this.state.imageData.find(el => el.id===prevId);
     image.display = true;
