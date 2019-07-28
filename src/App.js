@@ -22,7 +22,7 @@ export default class App extends React.Component {
       prevId = 0;
     }
 
-    let image = this.findImageData(prevId);
+    let image = this.state.imageData.find(el => el.id===prevId);
     image.display = true;
     let imageDisplay = this.state.imageData.map(el => el.id === prevId ? image : el);
     this.setState({ imageDisplay });
@@ -32,15 +32,11 @@ export default class App extends React.Component {
     });
   }
 
-  findImageData = (id) => {
-    return this.state.imageData.find(el => el.id===id);
-  }
-
   render() {
     return (
       <div className="row">
         <form className="col-md-3" onSubmit={this.handleSubmit}>
-          <ImageForm images={this.state.imageData} />
+          <ImageForm images={this.state.imageData}/>
           <button type="submit" className="btn btn-primary ml-4" >
             Submit
           </button>

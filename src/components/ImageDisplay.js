@@ -1,5 +1,5 @@
 import React from 'react';
-var ReactGridLayout = require('react-grid-layout');
+let ReactGridLayout = require('react-grid-layout');
 
 export default class ImageDisplay extends React.Component {
   displayImages = (element) => {
@@ -25,14 +25,10 @@ export default class ImageDisplay extends React.Component {
     });
   }
 
-  findImageData = (id) => {
-    return this.props.images.find(el => el.id===id);
-  }
-
   removeClick = (id,e) => {
     e.stopPropagation();
     let index = e.target.name;
-    let image = this.findImageData(id);
+    let image = this.props.images.find(el => el.id===id);
     image.files.splice(index, 1);
     image.names.splice(index, 1);
     let imageData = this.props.images.map(el => el.id === id ? image : el);
@@ -43,7 +39,7 @@ export default class ImageDisplay extends React.Component {
     let imageHtml = [];
     if (this.props.images.length > 1) {
       this.props.images.map((element) => {
-        if(element.display == true)
+        if(element.display === true)
         {
           imageHtml.push(this.displayImages(element));
         }
