@@ -6,7 +6,7 @@ export default class ImageForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      imageData: [{ id: 1, description: "", files: [], names: [] }],
+      imageData: [{ id: 1, description: "", files: [], names: [], display: false }],
       showImages: false
     };
   }
@@ -14,6 +14,7 @@ export default class ImageForm extends React.Component {
   addClick(){
     const { imageData } = this.state;
     let prevId;
+    console.log(this.state.imageData);
 
     if (imageData.length) {
       prevId = imageData[imageData.length - 1].id;
@@ -22,7 +23,7 @@ export default class ImageForm extends React.Component {
     }
 
     this.setState({
-      imageData: [...imageData, { id: prevId + 1, description: "", files: [], names: [] }],
+      imageData: [...imageData, { id: prevId + 1, description: "", files: [], names: [], display: false }],
       showImages: false
     });
   }
@@ -66,7 +67,24 @@ export default class ImageForm extends React.Component {
   
   handleSubmit = (e) => {
     e.preventDefault();
-    this.setState({showImages: true});
+    const { imageData } = this.state;
+    let prevId;
+
+    if (imageData.length) {
+      prevId = imageData[imageData.length - 1].id;
+    } else {
+      prevId = 0;
+    }
+
+    let image = this.findImageData(prevId);
+    image.display = true;
+    let imageData2 = this.state.imageData.map(el => el.id === prevId ? image : el);
+    this.setState({ imageData2 });
+
+    this.setState({
+      imageData: [...imageData, { id: prevId + 1, description: "", files: [], names: [], display: false }],
+      showImages: true
+    });
   }
 
   removeClick = (id,e) => {
@@ -79,11 +97,12 @@ export default class ImageForm extends React.Component {
     this.setState({ imageData });
   }
 
-  displayImages = () => {
-    var images = JSON.parse(JSON.stringify(this.state.imageData));
+  displayImages = (element) => {
+    //var images = JSON.parse(JSON.stringify(this.state.imageData));
     var key = 0;
-
-    return images.map((element) => {
+    //console.log(m);
+    
+    //return images.map((element) => {
       let id = element.id;
       let description = element.description;
       let names = element.names;
@@ -96,7 +115,7 @@ export default class ImageForm extends React.Component {
           k = 0;
         }
         return (
-          <div className="card" key={key++} data-grid={{x: k, y: 1, w: 3, h: 6}}>
+          <div className="card" key={id + " " + key++} data-grid={{x: k, y: 1, w: 3, h: 6}}>
             <img title = {names[index++] + "\n" + description} src={x} height="180" width="222"/>
             <button type='button' className="btn btn-danger" name={index-1} onMouseDown={this.removeClick.bind(this, id)} onTouchStart={this.removeClick.bind(this, id)}>
               X
@@ -104,26 +123,29 @@ export default class ImageForm extends React.Component {
           </div>
         );
       });
-    });
+    //});
   }
 
   render() {
-    let imageHtml = null;
+    let imageHtml = [];
 
-    if (this.state.showImages === true) {
-      imageHtml = this.displayImages();
+    if (this.state.imageData.length > 1) {
+      this.state.imageData.map((element) => {
+        if(element.display == true)
+        {
+          imageHtml.push(this.displayImages(element));
+        }
+      });
     }
 
     return (
       <div className="row">
         <form className="col-md-3" onSubmit={this.handleSubmit}>
           {this.createUI()}
-          <button type="submit" className="btn btn-primary">
+          <button type="submit" className="btn btn-primary ml-4" >
             Submit
           </button>
-          <button type="button" className="btn btn-info ml-4 mb-2" onClick={this.addClick.bind(this)}>
-            Add more
-          </button>
+          {console.log(imageHtml)}
         </form>
         <div className="col-md-9">
           <ReactGridLayout className="layout card mt-4" cols={12} rowHeight={30} width={950}>
