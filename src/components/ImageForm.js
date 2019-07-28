@@ -1,6 +1,10 @@
 import React from 'react';
 
 export default class ImageForm extends React.Component {
+  findImageData = (id) => {
+    return this.props.images.find(el => el.id===id);
+  }
+
   handleChange = (id, e) => {
     let image = this.findImageData(id);
     image.description = e.target.value;
@@ -24,10 +28,6 @@ export default class ImageForm extends React.Component {
 
     let imageData = this.props.images.map(el => el.id === id ? image : el);
     this.setState({ imageData });
-  }
-
-  findImageData = (id) => {
-    return this.props.images.find(el => el.id===id);
   }
 
   render () {
